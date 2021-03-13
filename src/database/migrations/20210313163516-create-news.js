@@ -1,27 +1,40 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    const UsersTable = queryInterface.createTable("users", {
+    const NewsTable = queryInterface.createTable("news", {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID
       },
-      name: {
+      title: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      email: {
-        allowNull: false,
-        unique: true,
-        type: Sequelize.STRING
-      },
-      password: {
+      description: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      avatar: {
+      image: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      created_by: {
+        type: Sequelize.UUID,
+        references: {
+          model: "users",
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
+      },
+      updated_by: {
+        type: Sequelize.UUID,
+        references: {
+          model: "users",
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       },
       created_at: {
         allowNull: false,
@@ -34,13 +47,13 @@ module.exports = {
         defaultValue: new Date()
       },
       deleted_at: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE
       }
     });
 
-    return UsersTable;
+    return NewsTable;
   },
 
-  down: queryInterface => queryInterface.dropTable("users")
+  down: queryInterface => queryInterface.dropTable("news")
 };

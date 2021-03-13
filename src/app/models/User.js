@@ -6,7 +6,7 @@ class User extends Model {
     super.init(
       {
         id: {
-          type: DataTypes.STRING,
+          type: DataTypes.UUID,
           primaryKey: true
         },
         name: DataTypes.STRING,
@@ -14,21 +14,21 @@ class User extends Model {
         avatar: DataTypes.STRING,
         pass: DataTypes.VIRTUAL,
         password: DataTypes.STRING,
-        createdAt: {
+        created_at: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW
         },
-        updatedAt: {
+        updated_at: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW
         },
-        deletedAt: {
+        deleted_at: {
           type: DataTypes.DATE
         }
       },
       {
         sequelize,
-        tableName: "user",
+        tableName: "users",
         timestamps: false
       }
     );

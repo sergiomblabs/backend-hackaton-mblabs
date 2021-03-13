@@ -4,8 +4,12 @@ import Umzug from "umzug";
 import databaseConfig from "../config/database";
 
 import UserModel from "../app/models/User";
+import HandoutModel from "../app/models/Handout";
+import Channel from "../app/models/Channel";
+import News from "../app/models/News";
+import ChannelUser from "../app/models/ChannelUser";
 
-const models = [UserModel];
+const models = [UserModel, HandoutModel, Channel, News, ChannelUser];
 
 class Database {
   constructor() {
@@ -20,7 +24,8 @@ class Database {
     const databases = Object.keys(databaseConfig.databases);
 
     // Loop over the array and create a new Sequelize instance for every database from config.js
-    for (let i = 0; i < databases.length; ++i) {
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < databases.length; i++) {
       const database = databases[i];
       const dbPath = databaseConfig.databases[database];
       // Store the database connection in our db object
