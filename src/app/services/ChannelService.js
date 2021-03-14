@@ -5,34 +5,33 @@ import ServerError from "../../utils/ServerError";
 import Channel from "../models/Channel";
 import User from "../models/User";
 import ChannelUser from "../models/ChannelUser";
+import ChannelMessage from "../models/ChannelMassage";
+import ChannelMessageFavorite from "../models/ChannelMassageFavorite";
 
 const { Op } = require("sequelize");
 
 class ChannelService {
   async create(data) {
-    const id = uuidv4();
-
-    const createdChannel = await Channel.create({
-      id,
+    const channelSaved = await Channel.create({
+      id: uuidv4(),
       title: data.title,
       description: data.description,
       created_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d",
       updated_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d"
     });
 
-    return createdChannel;
+    return channelSaved;
   }
 
   async getAll() {
     const channels = await ChannelUser.findAll({
+      where: {
+        id_user: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d"
+      },
       include: [
         {
-          model: User,
-          as: "user"
-        },
-        {
           model: Channel,
-          as: "channel"
+          as: "channels"
         }
       ]
     });
@@ -48,7 +47,7 @@ class ChannelService {
       include: [
         {
           model: User,
-          as: "user"
+          as: "users"
         }
       ]
     });
@@ -57,8 +56,6 @@ class ChannelService {
   }
 
   async addUser(data) {
-    const id = uuidv4();
-
     const userSaved = await User.findByPk(data.userId);
     if (!userSaved) {
       throw new ServerError("Usuário não encontrado", 409, "warn");
@@ -79,7 +76,7 @@ class ChannelService {
     }
 
     await ChannelUser.create({
-      id,
+      id: uuidv4(),
       id_user: data.userId,
       id_channel: data.channelId,
       created_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d",
@@ -88,6 +85,75 @@ class ChannelService {
 
     return this.getById(data.channelId);
   }
-}
 
+  async sendMessage(data) {
+    const id = uuidv4();
+
+    const channelSaved = await Channel.findByPk(data.id_channel);
+    if (!channelSaved) {
+      throw new ServerError("Canal não encontrado", 409, "warn");
+    }
+
+    await ChannelMessage.create({
+      id,
+      id_channel: data.channelId,
+      text: data.text,
+      created_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d",
+      updated_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d"
+    });
+  }
+
+  async favoriteMessage(data) {
+    const messageSaved = await ChannelMessage.findByPk(data.id_message);
+    if (!messageSaved) {
+      throw new ServerError("Mensagem não encontrada", 409, "warn");
+    }
+
+    const existFavoriteMessage = await ChannelMessageFavorite.findOne({
+      where: {
+        id_user: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d",
+        id_message: data.id_message
+      }
+    });
+    if (existFavoriteMessage) {
+      await ChannelMessageFavorite.destroy({
+        where: {
+          id_user: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d",
+          id_message: data.id_message
+        }
+      });
+    }
+
+    await ChannelMessageFavorite.create({
+      id: uuidv4(),
+      id_user: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d",
+      id_message: data.id_message,
+      created_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d",
+      updated_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d"
+    });
+  }
+
+  async getFavoriteMessages() {
+    const favoriteMessages = await ChannelMessageFavorite.findAll({
+      where: {
+        id_user: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d"
+      },
+      include: [
+        {
+          model: ChannelMessage,
+          as: "messages"
+        }
+      ]
+    });
+    return favoriteMessages;
+  }
+
+  async deleteMessage(id) {
+    await ChannelMessage.destroy({
+      where: {
+        id
+      }
+    });
+  }
+}
 export default new ChannelService();

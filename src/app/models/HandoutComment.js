@@ -9,15 +9,15 @@ class HandoutComment extends Model {
           primaryKey: true
         },
         text: DataTypes.STRING,
-        createdAt: {
+        created_at: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW
         },
-        updatedAt: {
+        updated_at: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW
         },
-        deletedAt: {
+        deleted_at: {
           type: DataTypes.DATE
         }
       },
@@ -32,28 +32,18 @@ class HandoutComment extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Users, {
+    this.belongsTo(models.User, {
       foreignKey: {
         name: "created_by",
         field: "created_by"
-      },
-      as: "user"
+      }
     });
 
-    this.belongsTo(models.Users, {
+    this.belongsTo(models.User, {
       foreignKey: {
         name: "updated_by",
         field: "updated_by"
-      },
-      as: "user"
-    });
-
-    this.belongsTo(models.Handout, {
-      foreignKey: {
-        name: "id_handout",
-        field: "id_handout"
-      },
-      as: "handout_comments"
+      }
     });
   }
 }

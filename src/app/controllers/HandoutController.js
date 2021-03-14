@@ -17,10 +17,10 @@ class HandoutController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const createdHandout = await HandoutService.create(req.body);
+    const handoutSaved = await HandoutService.create(req.body);
 
     return res
-      .json(createdHandout)
+      .json(handoutSaved)
       .status(202)
       .end();
   }
@@ -41,10 +41,30 @@ class HandoutController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const handout = await HandoutService.getById(id);
+    const handoutSaved = await HandoutService.getById(id);
 
     return res
-      .json(handout)
+      .json(handoutSaved)
+      .status(202)
+      .end();
+  }
+
+  async createComment(req, res) {
+    const valid = await Yup.object()
+      .shape({
+        id_handout: Yup.string().required(),
+        text: Yup.string().required()
+      })
+      .isValid(req.body);
+
+    if (!valid) {
+      throw new ServerError("Erro de validação", 400, "warn");
+    }
+
+    const createdHandoutComment = await HandoutService.createComment(req.body);
+
+    return res
+      .json(createdHandoutComment)
       .status(202)
       .end();
   }

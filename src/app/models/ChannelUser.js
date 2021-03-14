@@ -35,16 +35,14 @@ class ChannelUser extends Model {
       foreignKey: {
         name: "created_by",
         field: "created_by"
-      },
-      as: "created"
+      }
     });
 
     this.belongsTo(models.User, {
       foreignKey: {
         name: "updated_by",
         field: "updated_by"
-      },
-      as: "updated"
+      }
     });
 
     this.belongsTo(models.User, {
@@ -52,7 +50,7 @@ class ChannelUser extends Model {
         name: "id_user",
         field: "id_user"
       },
-      as: "user"
+      as: "users"
     });
 
     this.belongsTo(models.Channel, {
@@ -60,7 +58,7 @@ class ChannelUser extends Model {
         name: "id_channel",
         field: "id_channel"
       },
-      as: "channel"
+      as: "channels"
     });
   }
 }

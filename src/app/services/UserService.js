@@ -5,14 +5,11 @@ import ServerError from "../../utils/ServerError";
 
 class UserService {
   async create(data) {
-    const id = uuidv4();
-
     const existingUser = await User.findOne({
       where: {
         email: data.email
       }
     });
-
     if (existingUser) {
       throw new ServerError(
         "Já existe um usuário cadastrado com este e-mail",
@@ -21,15 +18,15 @@ class UserService {
       );
     }
 
-    const createdUser = await User.create({
-      id,
+    const userSaved = await User.create({
+      id: uuidv4(),
       email: data.email,
       pass: data.password,
       name: data.name,
       avatar: data.avatar
     });
 
-    return createdUser;
+    return userSaved;
   }
 
   async getAll() {
@@ -39,9 +36,9 @@ class UserService {
   }
 
   async getById(id) {
-    const existingUser = await User.findByPk(id);
+    const userSaved = await User.findByPk(id);
 
-    return existingUser;
+    return userSaved;
   }
 }
 

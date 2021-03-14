@@ -16,10 +16,10 @@ class ChannelController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const createdChannel = await ChannelService.create();
+    const channelSaved = await ChannelService.create(req.body);
 
     return res
-      .json(createdChannel)
+      .json(channelSaved)
       .status(202)
       .end();
   }
@@ -66,6 +66,57 @@ class ChannelController {
       .json(channelSaved)
       .status(202)
       .end();
+  }
+
+  async sendMessage(req, res) {
+    const valid = await Yup.object()
+      .shape({
+        id_channel: Yup.string().required(),
+        text: Yup.string().required()
+      })
+      .isValid(req.body);
+
+    if (!valid) {
+      throw new ServerError("Erro de validação", 400, "warn");
+    }
+
+    await ChannelService.sendMessage(req.body);
+
+    return res.status(202).end();
+  }
+
+  async favoriteMessage(req, res) {
+    const valid = await Yup.object()
+      .shape({
+        id_message: Yup.string().required()
+      })
+      .isValid(req.body);
+
+    if (!valid) {
+      throw new ServerError("Erro de validação", 400, "warn");
+    }
+
+    await ChannelService.favoriteMessage(req.body);
+
+    return res.status(202).end();
+  }
+
+  async getFavoriteMessages(req, res) {
+    const favoriteMessages = await ChannelService.getFavoriteMessages();
+    return res
+      .json(favoriteMessages)
+      .status(202)
+      .end();
+  }
+
+  async deleteMessage(req, res) {
+    const { id } = req.params;
+
+    if (!id) {
+      throw new ServerError("Erro de validação", 400, "warn");
+    }
+    await ChannelService.deleteMessage(id);
+    return res.status(202).end();
   }
 }
 

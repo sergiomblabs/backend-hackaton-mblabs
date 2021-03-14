@@ -38,16 +38,22 @@ class Handout extends Model {
       foreignKey: {
         name: "created_by",
         field: "created_by"
-      },
-      as: "created"
+      }
     });
 
     this.belongsTo(models.User, {
       foreignKey: {
         name: "updated_by",
         field: "updated_by"
+      }
+    });
+
+    this.hasMany(models.HandoutComment, {
+      foreignKey: {
+        name: "id_handout",
+        field: "id_handout"
       },
-      as: "updated"
+      as: "comments"
     });
   }
 }

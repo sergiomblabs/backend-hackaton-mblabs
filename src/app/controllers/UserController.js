@@ -18,10 +18,10 @@ class UserController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const createdUser = await UserService.create(req.body);
+    const userSaved = await UserService.create(req.body);
 
     return res
-      .json(createdUser)
+      .json(userSaved)
       .status(202)
       .end();
   }

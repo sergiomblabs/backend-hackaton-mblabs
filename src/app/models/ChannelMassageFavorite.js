@@ -22,7 +22,7 @@ class ChannelMassageFavorite extends Model {
       },
       {
         sequelize,
-        tableName: "channel_message_favorite",
+        tableName: "channel_messages_favorite",
         timestamps: false
       }
     );
@@ -31,23 +31,23 @@ class ChannelMassageFavorite extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Users, {
+    this.belongsTo(models.User, {
       foreignKey: {
         name: "created_by",
         field: "created_by"
       },
-      as: "user"
+      as: "created"
     });
 
-    this.belongsTo(models.Users, {
+    this.belongsTo(models.User, {
       foreignKey: {
         name: "updated_by",
         field: "updated_by"
       },
-      as: "user"
+      as: "updated"
     });
 
-    this.belongsTo(models.Users, {
+    this.belongsTo(models.User, {
       foreignKey: {
         name: "id_user",
         field: "id_user"
@@ -60,7 +60,7 @@ class ChannelMassageFavorite extends Model {
         name: "id_message",
         field: "id_message"
       },
-      as: "message"
+      as: "messages"
     });
   }
 }

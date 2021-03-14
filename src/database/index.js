@@ -5,11 +5,23 @@ import databaseConfig from "../config/database";
 
 import UserModel from "../app/models/User";
 import HandoutModel from "../app/models/Handout";
-import Channel from "../app/models/Channel";
-import News from "../app/models/News";
-import ChannelUser from "../app/models/ChannelUser";
+import HandoutCommentModel from "../app/models/HandoutComment";
+import ChannelModel from "../app/models/Channel";
+import NewsModel from "../app/models/News";
+import ChannelUserModel from "../app/models/ChannelUser";
+import ChannelMessageModel from "../app/models/ChannelMassage";
+import ChannelMassageFavoriteModel from "../app/models/ChannelMassageFavorite";
 
-const models = [UserModel, HandoutModel, Channel, News, ChannelUser];
+const models = [
+  UserModel,
+  HandoutModel,
+  HandoutCommentModel,
+  ChannelModel,
+  NewsModel,
+  ChannelUserModel,
+  ChannelMessageModel,
+  ChannelMassageFavoriteModel
+];
 
 class Database {
   constructor() {

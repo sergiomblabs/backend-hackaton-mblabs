@@ -10,6 +10,10 @@ class Channel extends Model {
         },
         title: DataTypes.STRING,
         description: DataTypes.STRING,
+        created_at: {
+          type: DataTypes.DATE,
+          defaultValue: DataTypes.NOW
+        },
         updated_at: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW
@@ -33,16 +37,22 @@ class Channel extends Model {
       foreignKey: {
         name: "created_by",
         field: "created_by"
-      },
-      as: "created"
+      }
     });
 
     this.belongsTo(models.User, {
       foreignKey: {
         name: "updated_by",
         field: "updated_by"
+      }
+    });
+
+    this.hasMany(models.ChannelUser, {
+      foreignKey: {
+        name: "id_user",
+        field: "id_user"
       },
-      as: "updated"
+      as: "users"
     });
   }
 }

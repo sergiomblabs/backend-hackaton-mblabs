@@ -37,6 +37,9 @@ routes.get("/handout", (req, res, next) =>
 routes.get("/handout/:id", (req, res, next) =>
   HandoutController.getById(req, res, next).catch(next)
 );
+routes.post("/handout/create-comment", (req, res, next) =>
+  HandoutController.createComment(req, res, next).catch(next)
+);
 
 /* ********************* Channel ********************* */
 routes.post("/channel", (req, res, next) =>
@@ -45,11 +48,23 @@ routes.post("/channel", (req, res, next) =>
 routes.get("/channel", (req, res, next) =>
   ChannelController.getAll(req, res, next).catch(next)
 );
+routes.get("/channel/favorite-message", (req, res, next) =>
+  ChannelController.getFavoriteMessages(req, res, next).catch(next)
+);
 routes.get("/channel/:id", (req, res, next) =>
   ChannelController.getById(req, res, next).catch(next)
 );
 routes.post("/channel/add-user", (req, res, next) =>
   ChannelController.addUser(req, res, next).catch(next)
+);
+routes.post("/channel/send-message", (req, res, next) =>
+  ChannelController.sendMessage(req, res, next).catch(next)
+);
+routes.post("/channel/favorite-message", (req, res, next) =>
+  ChannelController.favoriteMessage(req, res, next).catch(next)
+);
+routes.delete("/channel/message/:id", (req, res, next) =>
+  ChannelController.deleteMessage(req, res, next).catch(next)
 );
 
 /* ********************* News ********************* */

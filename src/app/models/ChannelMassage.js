@@ -9,21 +9,21 @@ class ChannelMassage extends Model {
           primaryKey: true
         },
         text: DataTypes.STRING,
-        createdAt: {
+        created_at: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW
         },
-        updatedAt: {
+        updated_at: {
           type: DataTypes.DATE,
           defaultValue: DataTypes.NOW
         },
-        deletedAt: {
+        deleted_at: {
           type: DataTypes.DATE
         }
       },
       {
         sequelize,
-        tableName: "channel_message",
+        tableName: "channel_messages",
         timestamps: false
       }
     );
@@ -32,20 +32,20 @@ class ChannelMassage extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Users, {
+    this.belongsTo(models.User, {
       foreignKey: {
         name: "created_by",
         field: "created_by"
       },
-      as: "user"
+      as: "created"
     });
 
-    this.belongsTo(models.Users, {
+    this.belongsTo(models.User, {
       foreignKey: {
         name: "updated_by",
         field: "updated_by"
       },
-      as: "user"
+      as: "updated"
     });
 
     this.belongsTo(models.Channel, {
