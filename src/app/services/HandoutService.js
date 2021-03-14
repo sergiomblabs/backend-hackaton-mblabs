@@ -23,7 +23,7 @@ class HandoutService {
     const handouts = await Handout.findAll({
       order: [
         ["fixed", "DESC"],
-        ["created_at", "ASC"]
+        ["created_at", "DESC"]
       ],
       include: [
         {
