@@ -10,7 +10,8 @@ class PingController {
    */
   async get(req, res) {
     return res.json({
-      status: "ok"
+      status: "ok",
+      dateNow: new Date()
     });
   }
 }
