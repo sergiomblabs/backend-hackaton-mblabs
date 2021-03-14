@@ -20,11 +20,18 @@ class ChannelService {
       updated_by: data.user.id
     });
 
-    data.users.foreach(item => {
-      this.addUser({
-        Data: { body: { userId: item, channelId: channelSaved.id } }
+    if (data.body.users) {
+      data.body.users.foreach(async item => {
+        const user = await User.findOne({
+          where: {
+            name: item
+          }
+        });
+        this.addUser({
+          Data: { body: { userId: user.id, channelId: channelSaved.id } }
+        });
       });
-    });
+    }
 
     return channelSaved;
   }
