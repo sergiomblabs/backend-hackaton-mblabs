@@ -22,7 +22,7 @@ class AuthService {
       expiresIn: authConfig.expiresIn
     });
 
-    return token;
+    return { userSaved, token };
   }
 }
 
