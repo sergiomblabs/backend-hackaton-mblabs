@@ -8,7 +8,7 @@ class NewsService {
       id: uuidv4(),
       title: data.body.title,
       description: data.body.description,
-      image: data.body.image,
+      image: "urlImage",
       created_by: data.user.id,
       updated_by: data.user.id
     });

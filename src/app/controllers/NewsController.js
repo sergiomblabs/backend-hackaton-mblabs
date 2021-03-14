@@ -8,8 +8,7 @@ class NewsController {
     const valid = await Yup.object()
       .shape({
         title: Yup.string().required(),
-        description: Yup.string().required(),
-        image: Yup.string().required()
+        description: Yup.string().required()
       })
       .isValid(req.body);
 
