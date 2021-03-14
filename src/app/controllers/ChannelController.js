@@ -1,7 +1,10 @@
 import * as Yup from "yup";
 
 import ChannelService from "../services/ChannelService";
+import ChannelMessage from "../models/ChannelMassage";
 import ServerError from "../../utils/ServerError";
+
+const socketio = require("socket.io");
 
 class ChannelController {
   async create(req, res) {
@@ -119,6 +122,26 @@ class ChannelController {
     }
     await ChannelService.deleteMessage(id);
     return res.status(202).end();
+  }
+
+  async refreshMessages(req) {
+    socketio.on("connection", socket => {
+      socket.on("refreshMessages", data => {
+        ChannelMessage.findAll({
+          where: {
+            id_channel: req.body.id_channel
+          }
+        })
+          .then(res => {
+            socket.emit("refreshMessages", res.row);
+          })
+          .catch(() => {});
+
+        socket.broadcast.emit("refreshMessages", data);
+      });
+
+      socket.on("disconnect", () => {});
+    });
   }
 }
 

@@ -38,7 +38,8 @@ class Handout extends Model {
       foreignKey: {
         name: "created_by",
         field: "created_by"
-      }
+      },
+      as: "user"
     });
 
     this.belongsTo(models.User, {

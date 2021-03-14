@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import ServerError from "../../utils/ServerError";
 import Handout from "../models/Handout";
+import User from "../models/User";
 import HandoutComment from "../models/HandoutComment";
 
 class HandoutService {
@@ -28,6 +29,11 @@ class HandoutService {
         {
           model: HandoutComment,
           as: "comments"
+        },
+        {
+          attributes: ["name", "avatar"],
+          model: User,
+          as: "user"
         }
       ]
     });
@@ -43,7 +49,19 @@ class HandoutService {
       include: [
         {
           model: HandoutComment,
-          as: "comments"
+          as: "comments",
+          include: [
+            {
+              attributes: ["name", "avatar"],
+              model: User,
+              as: "user"
+            }
+          ]
+        },
+        {
+          attributes: ["name", "avatar"],
+          model: User,
+          as: "user"
         }
       ]
     });

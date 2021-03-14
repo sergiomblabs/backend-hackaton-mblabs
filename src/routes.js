@@ -75,6 +75,9 @@ routes.post("/channel/send-message", (req, res, next) =>
 routes.post("/channel/favorite-message", (req, res, next) =>
   ChannelController.favoriteMessage(req, res, next).catch(next)
 );
+routes.post("/channel/refresh-messages", (req, res, next) =>
+  ChannelController.refreshMessages(req, res, next).catch(next)
+);
 routes.delete("/channel/message/:id", (req, res, next) =>
   ChannelController.deleteMessage(req, res, next).catch(next)
 );

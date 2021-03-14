@@ -35,6 +35,7 @@
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.1.0",
     "sequelize": "^5.21.3",
+    "socket.io": "^4.0.0",
     "umzug": "^2.2.0",
     "uuid": "^8.3.2",
     "winston": "^3.2.1",
