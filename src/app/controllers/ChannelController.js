@@ -19,7 +19,7 @@ class ChannelController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const channelSaved = await ChannelService.create(req);
+    const channelSaved = await ChannelService.create(req.user, req.body);
 
     return res
       .json(channelSaved)

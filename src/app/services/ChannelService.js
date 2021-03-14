@@ -11,25 +11,30 @@ import ChannelMessageFavorite from "../models/ChannelMassageFavorite";
 const { Op } = require("sequelize");
 
 class ChannelService {
-  async create(data) {
+  async create(user, data) {
+    const { title, description, users } = data;
     const channelSaved = await Channel.create({
       id: uuidv4(),
-      title: data.body.title,
-      description: data.body.description,
-      created_by: data.user.id,
-      updated_by: data.user.id
+      title,
+      description,
+      created_by: user.id,
+      updated_by: user.id
     });
 
-    if (data.body.users) {
-      data.body.users.foreach(async item => {
-        const user = await User.findOne({
+    if (users) {
+      users.map(async item => {
+        const existUser = await User.findOne({
           where: {
             name: item
           }
         });
-        this.addUser({
-          Data: { body: { userId: user.id, channelId: channelSaved.id } }
-        });
+
+        const newData = {
+          userId: existUser.id,
+          channelId: channelSaved.id,
+          ownerId: user.id
+        };
+        await this.addUser(newData);
       });
     }
 
@@ -74,22 +79,19 @@ class ChannelService {
   }
 
   async addUser(data) {
-    const userSaved = await User.findByPk(data.body.userId);
+    const userSaved = await User.findByPk(data.userId);
     if (!userSaved) {
       throw new ServerError("Usuário não encontrado", 409, "warn");
     }
 
-    const channelSaved = await Channel.findByPk(data.body.channelId);
+    const channelSaved = await Channel.findByPk(data.channelId);
     if (!channelSaved) {
       throw new ServerError("Canal não encontrado", 409, "warn");
     }
 
     const channelUserSaved = await ChannelUser.findOne({
       where: {
-        [Op.and]: [
-          { id_user: data.body.userId },
-          { id_channel: data.body.channelId }
-        ]
+        [Op.and]: [{ id_user: data.userId }, { id_channel: data.channelId }]
       }
     });
     if (channelUserSaved) {
@@ -98,13 +100,13 @@ class ChannelService {
 
     await ChannelUser.create({
       id: uuidv4(),
-      id_user: data.body.userId,
-      id_channel: data.body.channelId,
-      created_by: data.user.id,
-      updated_by: data.user.id
+      id_user: data.userId,
+      id_channel: data.channelId,
+      created_by: data.ownerId,
+      updated_by: data.ownerId
     });
 
-    return this.getById(data.body.channelId);
+    return this.getById(data.channelId);
   }
 
   async sendMessage(data) {
