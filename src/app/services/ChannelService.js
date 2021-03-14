@@ -20,6 +20,12 @@ class ChannelService {
       updated_by: data.user.id
     });
 
+    data.users.foreach(item => {
+      this.addUser({
+        Data: { body: { userId: item, channelId: channelSaved.id } }
+      });
+    });
+
     return channelSaved;
   }
 
