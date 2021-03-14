@@ -2,26 +2,22 @@ import jwt from "jsonwebtoken";
 import { promisify } from "util";
 
 import authConfig from "../../config/auth";
+import UserService from "../services/UserService";
 
-/**
- * Middleware to parse the user's token.
- *
- * @param {Request} req the request object
- * @param {Response} res the response object
- * @param {Function} next function to call next middleware
- * @returns a promise that resolves to void after parsing the token
- */
 export default async (req, res, next) => {
   const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ message: "Token inválido" });
+  }
 
-  if (authHeader) {
-    const [, token] = authHeader.split(" ");
+  const [, token] = authHeader.split(" ");
 
-    try {
-      const decoded = await promisify(jwt.verify)(token, authConfig.secret);
-
-      req.userId = decoded.id;
-    } catch (err) {} // eslint-disable-line no-empty
+  try {
+    const decoded = await promisify(jwt.verify)(token, authConfig.secret);
+    const userSaved = await UserService.getById(decoded.userSaved.id);
+    req.user = userSaved;
+  } catch (err) {
+    return res.status(401).json({ message: "Usuário não autorizado" });
   }
 
   return next();

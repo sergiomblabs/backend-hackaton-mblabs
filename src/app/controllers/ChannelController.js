@@ -16,7 +16,7 @@ class ChannelController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const channelSaved = await ChannelService.create(req.body);
+    const channelSaved = await ChannelService.create(req);
 
     return res
       .json(channelSaved)
@@ -25,7 +25,7 @@ class ChannelController {
   }
 
   async getAll(req, res) {
-    const channels = await ChannelService.getAll();
+    const channels = await ChannelService.getAll(req.user.id);
 
     return res
       .json(channels)
@@ -40,7 +40,7 @@ class ChannelController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const channel = await ChannelService.getById(id);
+    const channel = await ChannelService.getById(id, req.user.id);
 
     return res
       .json(channel)
@@ -60,7 +60,7 @@ class ChannelController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const channelSaved = await ChannelService.addUser(req.body);
+    const channelSaved = await ChannelService.addUser(req);
 
     return res
       .json(channelSaved)
@@ -80,7 +80,7 @@ class ChannelController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    await ChannelService.sendMessage(req.body);
+    await ChannelService.sendMessage(req);
 
     return res.status(202).end();
   }
@@ -96,13 +96,15 @@ class ChannelController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    await ChannelService.favoriteMessage(req.body);
+    await ChannelService.favoriteMessage(req);
 
     return res.status(202).end();
   }
 
   async getFavoriteMessages(req, res) {
-    const favoriteMessages = await ChannelService.getFavoriteMessages();
+    const favoriteMessages = await ChannelService.getFavoriteMessages(
+      req.user.id
+    );
     return res
       .json(favoriteMessages)
       .status(202)

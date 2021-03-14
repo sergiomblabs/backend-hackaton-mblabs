@@ -17,7 +17,7 @@ class HandoutController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const handoutSaved = await HandoutService.create(req.body);
+    const handoutSaved = await HandoutService.create(req);
 
     return res
       .json(handoutSaved)
@@ -61,7 +61,7 @@ class HandoutController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const createdHandoutComment = await HandoutService.createComment(req.body);
+    const createdHandoutComment = await HandoutService.createComment(req);
 
     return res
       .json(createdHandoutComment)

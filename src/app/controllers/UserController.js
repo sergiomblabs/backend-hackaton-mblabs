@@ -18,7 +18,7 @@ class UserController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const userSaved = await UserService.create(req.body);
+    const userSaved = await UserService.create(req);
 
     return res
       .json(userSaved)
@@ -31,6 +31,15 @@ class UserController {
 
     return res
       .json(users)
+      .status(202)
+      .end();
+  }
+
+  async me(req, res) {
+    const userSaved = await UserService.getWithMessagesById(req.user.id);
+
+    return res
+      .json(userSaved)
       .status(202)
       .end();
   }

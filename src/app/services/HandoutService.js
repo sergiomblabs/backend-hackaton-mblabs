@@ -8,11 +8,11 @@ class HandoutService {
   async create(data) {
     const handoutSaved = await Handout.create({
       id: uuidv4(),
-      title: data.title,
-      description: data.description,
-      fixed: data.fixed,
-      created_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d",
-      updated_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d"
+      title: data.body.title,
+      description: data.body.description,
+      fixed: data.body.fixed,
+      created_by: data.user.id,
+      updated_by: data.user.id
     });
 
     return handoutSaved;
@@ -52,17 +52,17 @@ class HandoutService {
   }
 
   async createComment(data) {
-    const handoutSaved = await Handout.findByPk(data.id_handout);
+    const handoutSaved = await Handout.findByPk(data.body.id_handout);
     if (!handoutSaved) {
       throw new ServerError("Comunicado não encontrado", 400, "warn");
     }
 
     const handoutCommentSaved = await HandoutComment.create({
       id: uuidv4(),
-      id_handout: data.id_handout,
-      text: data.text,
-      created_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d",
-      updated_by: "1d5c5b56-d321-4eb2-a0ba-bb3f4157df5d"
+      id_handout: data.body.id_handout,
+      text: data.body.text,
+      created_by: data.user.id,
+      updated_by: data.user.id
     });
 
     return this.getById(handoutCommentSaved.id_handout);

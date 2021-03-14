@@ -17,7 +17,7 @@ class NewsController {
       throw new ServerError("Erro de validação", 400, "warn");
     }
 
-    const createdNews = await NewsService.create(req.body);
+    const createdNews = await NewsService.create(req);
 
     return res
       .json(createdNews)
